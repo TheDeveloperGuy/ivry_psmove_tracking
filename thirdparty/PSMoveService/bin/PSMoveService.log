@@ -1,0 +1,82 @@
+[2019-09-28 15:47:40.344]: main - Starting PSMoveService v0.9-alpha 9.0.1 (protocol v0.9-alpha 9.0.0)
+[2019-09-28 15:47:40.367]: USBAsyncRequestManager::startup - Requested LibUSBApi
+[2019-09-28 15:47:40.368]: USBAsyncRequestManager::startup - Creating LibUSBApi
+[2019-09-28 15:47:40.372]: USBAsyncRequestManager::startup - Initialized USB API
+[2019-09-28 15:47:40.385]: DeviceManager::startup - Platform Hotplug API is ENABLED
+[2019-09-28 15:47:40.451]: bluetooth_get_host_address - Found a bluetooth radio
+[2019-09-28 15:47:40.452]: bluetooth_get_host_address - Retrieved radio info
+[2019-09-28 15:47:40.755]: PS3EyeTracker::open - Opening PS3EyeTracker(USB\VID_1415&PID_2000\b7_p5, camera_index=0)
+[2019-09-28 15:47:41.239]: SharedMemory::initialize() - Allocating shared memory: tracker_view_0
+[2019-09-28 15:47:41.681]: DeviceTypeManager::update_connected_devices - Device device_id 0 (PSEYE) opened
+[2019-09-28 15:47:41.683]: PS3EyeTracker::open - Opening PS3EyeTracker(USB\VID_1415&PID_2000\b7_p6, camera_index=1)
+[2019-09-28 15:47:42.137]: SharedMemory::initialize() - Allocating shared memory: tracker_view_1
+[2019-09-28 15:47:42.146]: DeviceTypeManager::update_connected_devices - Device device_id 1 (PSEYE) opened
+[2019-09-28 15:47:51.407]: ClientConnection::start - Starting client connection id 0
+[2019-09-28 15:47:51.409]: ClientConnection::send_connection_info - Sending connection id to client 0
+[2019-09-28 15:48:09.127]: PSMoveController::open - Opening PSMoveController(\\?\hid#{00001124-0000-1000-8000-00805f9b34fb}_vid&0002054c_pid&03d5&col01#8&3132cdf5&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030})
+[2019-09-28 15:48:09.131]: PSMoveController::open -   with serial_number: fc62b945c9d0
+[2019-09-28 15:48:09.226]: WorkerThread::start - Starting worker thread: PSMoveSensorProcessor
+[2019-09-28 15:48:09.236]: DeviceTypeManager::update_connected_devices - Device device_id 0 (PSMove) opened
+[2019-09-28 15:48:11.576]: PSMoveController::open - Opening PSMoveController(\\?\hid#{00001124-0000-1000-8000-00805f9b34fb}_vid&0002054c_pid&03d5&col01#8&1d02fe7c&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030})
+[2019-09-28 15:48:11.578]: PSMoveController::open -   with serial_number: fc62b945c994
+[2019-09-28 15:48:11.688]: WorkerThread::start - Starting worker thread: PSMoveSensorProcessor
+[2019-09-28 15:48:11.694]: DeviceTypeManager::update_connected_devices - Device device_id 1 (PSMove) opened
+[2019-09-28 15:48:16.859]: PSMoveController::open - Opening PSMoveController(\\?\hid#{00001124-0000-1000-8000-00805f9b34fb}_vid&0002054c_pid&0c5e&col01#8&2f1b12a7&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030})
+[2019-09-28 15:48:16.862]: PSMoveController::open -   with serial_number: 90895f16dd6d
+[2019-09-28 15:48:16.893]: WorkerThread::start - Starting worker thread: PSMoveSensorProcessor
+[2019-09-28 15:48:16.899]: DeviceTypeManager::update_connected_devices - Device device_id 2 (PSMove) opened
+[2019-09-28 15:48:20.760]: ServerRequestHandler - Set controller(0) stream tracker id: 0
+[2019-09-28 15:48:20.763]: ServerRequestHandler - Start controller(0) stream (pos=1,phys=1,raw_sens=0,cal_sens=1,trkr=1,roi=0)
+[2019-09-28 15:48:38.106]: ServerRequestHandler - Stop controller(0) stream
+[2019-09-28 15:48:44.177]: ServerRequestHandler - Set controller(1) stream tracker id: 0
+[2019-09-28 15:48:44.178]: ServerRequestHandler - Start controller(1) stream (pos=1,phys=1,raw_sens=0,cal_sens=1,trkr=1,roi=0)
+[2019-09-28 15:48:52.699]: ServerRequestHandler - Stop controller(1) stream
+[2019-09-28 15:48:56.572]: ServerRequestHandler - Set controller(2) stream tracker id: 0
+[2019-09-28 15:48:56.574]: ServerRequestHandler - Start controller(2) stream (pos=1,phys=1,raw_sens=0,cal_sens=1,trkr=1,roi=0)
+[2019-09-28 15:49:12.643]: ServerRequestHandler - Stop controller(2) stream
+[2019-09-28 15:49:15.367]: ClientConnection::handle_tcp_read_request_header - Failed to read header on connection 0: An existing connection was forcibly closed by the remote host
+[2019-09-28 15:49:15.372]: ClientConnection::stop - Stopping client connection id 0
+[2019-09-28 16:11:40.61]: MorpheusHMD::open - Opening MorpheusHMD(USB\VID_054c&PID_09af).
+[2019-09-28 16:11:40.62]: MorpheusHMD::open - Morpheus command interface is flagged as DISABLED.
+[2019-09-28 16:11:40.63]: MorpheusHMD::open - Failed to open MorpheusHMD(USB\VID_054c&PID_09af)
+[2019-09-28 16:11:40.64]: MorpheusHMD::close - Closing MorpheusHMD sensor interface(\\?\hid#vid_054c&pid_09af&mi_04#8&25261f4&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030})
+[2019-09-28 16:11:40.66]: DeviceTypeManager::update_connected_devices - Device device_id 0 (USB\VID_054c&PID_09af) failed to open!
+[2019-09-28 16:11:40.169]: MorpheusHMD::open - Opening MorpheusHMD(USB\VID_054c&PID_09af).
+[2019-09-28 16:11:40.170]: MorpheusHMD::open - Morpheus command interface is flagged as DISABLED.
+[2019-09-28 16:11:40.171]: MorpheusHMD::open - Failed to open MorpheusHMD(USB\VID_054c&PID_09af)
+[2019-09-28 16:11:40.172]: MorpheusHMD::close - Closing MorpheusHMD sensor interface(\\?\hid#vid_054c&pid_09af&mi_04#8&25261f4&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030})
+[2019-09-28 16:11:40.174]: DeviceTypeManager::update_connected_devices - Device device_id 0 (USB\VID_054c&PID_09af) failed to open!
+[2019-09-28 16:11:40.405]: MorpheusHMD::open - Opening MorpheusHMD(USB\VID_054c&PID_09af).
+[2019-09-28 16:11:40.406]: MorpheusHMD::open - Morpheus command interface is flagged as DISABLED.
+[2019-09-28 16:11:40.410]: MorpheusHMD::open - Failed to open MorpheusHMD(USB\VID_054c&PID_09af)
+[2019-09-28 16:11:40.413]: MorpheusHMD::close - Closing MorpheusHMD sensor interface(\\?\hid#vid_054c&pid_09af&mi_04#8&25261f4&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030})
+[2019-09-28 16:11:40.415]: DeviceTypeManager::update_connected_devices - Device device_id 0 (USB\VID_054c&PID_09af) failed to open!
+[2019-09-28 16:11:40.569]: MorpheusHMD::open - Opening MorpheusHMD(USB\VID_054c&PID_09af).
+[2019-09-28 16:11:41.270]: MorpheusHMD::open - Morpheus command interface is flagged as DISABLED.
+[2019-09-28 16:11:41.272]: MorpheusHMD::open - Failed to open MorpheusHMD(USB\VID_054c&PID_09af)
+[2019-09-28 16:11:41.274]: MorpheusHMD::close - Closing MorpheusHMD sensor interface(\\?\hid#vid_054c&pid_09af&mi_04#8&25261f4&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030})
+[2019-09-28 16:11:41.276]: DeviceTypeManager::update_connected_devices - Device device_id 0 (USB\VID_054c&PID_09af) failed to open!
+[2019-09-28 16:11:41.356]: updatePoseFilter() - Incoming packet count: 145 (929.84ms), trimming: 45
+[2019-09-28 16:11:41.357]: updatePoseFilter() - Incoming packet count: 149 (949.979ms), trimming: 49
+[2019-09-28 16:11:41.359]: updatePoseFilter() - Incoming packet count: 230 (929.951ms), trimming: 130
+[2019-09-28 16:11:42.768]: MorpheusHMD::open - Opening MorpheusHMD(USB\VID_054c&PID_09af).
+[2019-09-28 16:11:42.770]: MorpheusHMD::open - Morpheus command interface is flagged as DISABLED.
+[2019-09-28 16:11:42.772]: MorpheusHMD::open - Failed to open MorpheusHMD(USB\VID_054c&PID_09af)
+[2019-09-28 16:11:42.773]: MorpheusHMD::close - Closing MorpheusHMD sensor interface(\\?\hid#vid_054c&pid_09af&mi_04#8&25261f4&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030})
+[2019-09-28 16:11:42.777]: DeviceTypeManager::update_connected_devices - Device device_id 0 (USB\VID_054c&PID_09af) failed to open!
+[2019-09-28 16:11:42.781]: updatePoseFilter() - Incoming packet count: 203 (1414.59ms), trimming: 103
+[2019-09-28 16:11:42.783]: updatePoseFilter() - Incoming packet count: 213 (1434.88ms), trimming: 113
+[2019-09-28 16:11:42.788]: updatePoseFilter() - Incoming packet count: 359 (1418.76ms), trimming: 259
+[2019-09-28 16:11:44.193]: ClientConnection::start - Starting client connection id 1
+[2019-09-28 16:11:44.196]: ClientConnection::send_connection_info - Sending connection id to client 1
+[2019-09-28 16:12:14.915]: ServerRequestHandler - Set controller(2) stream tracker id: 0
+[2019-09-28 16:12:14.916]: ServerRequestHandler - Start controller(2) stream (pos=1,phys=1,raw_sens=0,cal_sens=1,trkr=1,roi=0)
+[2019-09-28 16:12:41.182]: ServerRequestHandler - Stop controller(2) stream
+[2019-09-28 16:12:45.779]: ServerRequestHandler - Set controller(1) stream tracker id: 0
+[2019-09-28 16:12:45.780]: ServerRequestHandler - Start controller(1) stream (pos=1,phys=1,raw_sens=0,cal_sens=1,trkr=1,roi=0)
+[2019-09-28 16:13:01.265]: ServerRequestHandler - Stop controller(1) stream
+[2019-09-28 16:13:04.588]: ServerRequestHandler - Set controller(0) stream tracker id: 0
+[2019-09-28 16:13:04.591]: ServerRequestHandler - Start controller(0) stream (pos=1,phys=1,raw_sens=0,cal_sens=1,trkr=1,roi=0)
+[2019-09-28 16:13:17.594]: ServerRequestHandler - Stop controller(0) stream
+[2019-09-28 16:13:25.114]: ClientConnection::handle_tcp_read_request_header - Failed to read header on connection 1: An existing connection was forcibly closed by the remote host
+[2019-09-28 16:13:25.118]: ClientConnection::stop - Stopping client connection id 1
