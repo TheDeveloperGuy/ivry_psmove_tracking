@@ -19,8 +19,6 @@
 ***************************************************************************/
 
 #include "IvryPsMoveTrackingApp.h"
-//#include "iVRy_driver_config.h"
-//#include "iVRy_defs.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
