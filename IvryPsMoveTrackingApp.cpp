@@ -1,6 +1,6 @@
 /*************************************************************************
 *
-* Copyright (C) 2016-2020 Mediator Software and/or its subsidiary(-ies).
+* Copyright (C) 2016-2024 Mediator Software and/or its subsidiary(-ies).
 * All rights reserved.
 * Contact: Mediator Software (info@mediator-software.com)
 *
@@ -24,44 +24,11 @@
 #include <math.h>
 
 #define PSMOVE_SERVICE_PROCESSES "PSMoveService.exe\0PSMoveServiceAdmin.exe\0"
+#define PSMOVE_SERVICE_EXE_PATH "\\PSMoveServiceEx\\PSMoveService.exe"
 
 #undef UNICODE
 #include <Tlhelp32.h>
 #include <process.h>
-
-static bool IsPsMoveServiceRunning()
-{
-	int retries = 3;
-	bool running = false;
-
-	// Check if process is PSMoveService
-	const char *processes = PSMOVE_SERVICE_PROCESSES;
-	while (*processes != 0)
-	{
-		// Get snapshot of running processes
-		HANDLE hSnapShot = ::CreateToolhelp32Snapshot(TH32CS_SNAPALL, NULL);
-		PROCESSENTRY32 pEntry;
-		pEntry.dwSize = sizeof(pEntry);
-		BOOL hRes = ::Process32First(hSnapShot, &pEntry);
-		while (hRes)
-		{
-			// PSMoveService process?
-			if (_stricmp(pEntry.szExeFile, processes) == 0)
-			{
-				running = true;
-				break;
-			}
-
-			hRes = ::Process32Next(hSnapShot, &pEntry);
-		}
-
-		::CloseHandle(hSnapShot);
-
-		processes += strlen(processes) + 1;
-	}
-
-	return running;
-}
 
 /** Convert Quaternion to Euler **/
 static inline void HmdQuaternion_EulerFromQuaternion(double(&euler)[3], const vr::HmdQuaternion_t &quaternion)
@@ -115,7 +82,7 @@ static inline void HmdQuaternion_QuaternionFromEuler(vr::HmdQuaternion_t &quater
 
 IvryPsMoveTrackingApp::IvryPsMoveTrackingApp()
 	: m_pPsMoveClient(NULL)
-	, m_hPsMoveService(INVALID_HANDLE_VALUE)
+	, m_hPsMoveService(NULL)
 	, m_bTrackingEnabled(false)
 	, m_bUseDeviceOrientation(true)
 	, m_fDeviceCenterOffset(0.0f)
@@ -160,7 +127,7 @@ DWORD IvryPsMoveTrackingApp::Run()
 			*pos = '\0';
 
 			// Add path to PSMoveService exectable
-			strcat(szPath, "\\PSMoveSteamVRBridge\\PSMoveService.exe");
+			strcat(szPath, PSMOVE_SERVICE_EXE_PATH);
 			if (::GetFileAttributesA(szPath) != INVALID_FILE_ATTRIBUTES)
 			{
 				STARTUPINFOA sInfoProcess = { 0 };
@@ -180,23 +147,17 @@ DWORD IvryPsMoveTrackingApp::Run()
 			}
 		}
 
-		int32_t deviceIDs[1] = { 2 };
-		PSMTrackingColorType bulbColors[1] = { (PSMTrackingColorType)-1 };
-		m_pPsMoveClient = new IvryPsMoveClient(_deviceTypeController, 1, deviceIDs, bulbColors, true);
+		m_pPsMoveClient = new IvryPsMoveClient(this);
 		if (m_pPsMoveClient != NULL)
 		{
-			// Set PSMoveClient logging callback
-			m_pPsMoveClient->set_log_callback(PsMoveClientLogCallback, this);
-
 			// Start PSMoveClient tracking
 			if (m_pPsMoveClient->open())
 			{
-				// Set PSMoveClient callbacks
-				m_pPsMoveClient->set_tracking_callback(PsMoveClientTrackingCallback, this);
-				m_pPsMoveClient->set_controller_callback(PsMoveClientControllerCallback, this);
-
 				// Disable PSVR Leds
 				EnableDeviceLeds(false);
+
+				// Disable drift correction
+				EnableDeviceDriftCorrection(false);
 
 				// Run tracking
 				m_pPsMoveClient->run();
@@ -231,11 +192,11 @@ DWORD IvryPsMoveTrackingApp::Run()
 		}
 
 		// PSMoveService process started here?
-		if (m_hPsMoveService != INVALID_HANDLE_VALUE)
+		if (m_hPsMoveService != NULL)
 		{
 			// Terminate it
 			::TerminateProcess(m_hPsMoveService, 0);
-			m_hPsMoveService = INVALID_HANDLE_VALUE;
+			m_hPsMoveService = NULL;
 		}
 
 		// Close connection to driver
@@ -247,6 +208,41 @@ DWORD IvryPsMoveTrackingApp::Run()
 	}
 
 	return result;
+}
+
+/** Check if PSMoveService is running **/
+bool IvryPsMoveTrackingApp::IsPsMoveServiceRunning()
+{
+	int retries = 3;
+	bool running = false;
+
+	// Check if process is PSMoveService
+	const char *processes = PSMOVE_SERVICE_PROCESSES;
+	while (*processes != 0)
+	{
+		// Get snapshot of running processes
+		HANDLE hSnapShot = ::CreateToolhelp32Snapshot(TH32CS_SNAPALL, NULL);
+		PROCESSENTRY32 pEntry;
+		pEntry.dwSize = sizeof(pEntry);
+		BOOL hRes = ::Process32First(hSnapShot, &pEntry);
+		while (hRes)
+		{
+			// PSMoveService process?
+			if (_stricmp(pEntry.szExeFile, processes) == 0)
+			{
+				running = true;
+				break;
+			}
+
+			hRes = ::Process32Next(hSnapShot, &pEntry);
+		}
+
+		::CloseHandle(hSnapShot);
+
+		processes += strlen(processes) + 1;
+	}
+
+	return running;
 }
 
 /** Pose has been recevied from driver **/
@@ -296,6 +292,15 @@ void IvryPsMoveTrackingApp::OnDeviceRecenter()
 	m_bDeviceWasRecentered = true;
 }
 
+/** Reload tracker settings **/
+void IvryPsMoveTrackingApp::OnReloadSettings()
+{
+	if (m_pPsMoveClient != NULL)
+	{
+		m_pPsMoveClient->load_settings();
+	}
+}
+
 /** Driver is requesting tracking process quit **/
 void IvryPsMoveTrackingApp::OnQuit()
 {
@@ -308,58 +313,25 @@ void IvryPsMoveTrackingApp::OnQuit()
 	}
 }
 
-void IvryPsMoveTrackingApp::PsMoveClientTrackingCallback(vr::DriverPose_t &pose, void *user)
+void IvryPsMoveTrackingApp::PoseUpdated(const vr::DriverPose_t &pose)
 {
-	IvryPsMoveTrackingApp *thiz = (IvryPsMoveTrackingApp*)user;
-	if (thiz != NULL)
+	// Tracking not enabled yet?
+	if (!m_bTrackingEnabled)
 	{
-		// Tracking not enabled yet?
-		if (!thiz->m_bTrackingEnabled)
-		{
-			// Disable device orientation
-			thiz->EnableDeviceOrientation(false);
-
-			// Enable tracking
-			thiz->TrackingEnabled(true);
-			thiz->m_bTrackingEnabled = true;
-		}
-
-		vr::DriverPose_t updatedPose = pose;
-
-		// Use device orientation?
-		if (thiz->m_bUseDeviceOrientation)
-		{
-			double euler[3];
-			HmdQuaternion_EulerFromQuaternion(euler, thiz->GetDeviceOrientation());
-
-			// Offset orientation
-			euler[1] -= thiz->m_fDeviceCenterOffset;
-
-			vr::HmdQuaternion_t quaternion;
-			HmdQuaternion_QuaternionFromEuler(quaternion, euler);
-			updatedPose.qRotation = quaternion;
-		}
-
-		// Send pose to driver
-		thiz->PoseUpdated(updatedPose);
+		// Enable tracking
+		TrackingEnabled(true);
+		m_bTrackingEnabled = true;
 	}
+
+	// Send pose to driver
+	IvryTrackingApp::PoseUpdated(pose);
 }
 
-void IvryPsMoveTrackingApp::PsMoveClientControllerCallback(vr::DriverPose_t &pose, uint16_t buttons, float trigger, void *user)
+/** Controller haptics request has been received from driver **/
+void IvryPsMoveTrackingApp::OnControllerHaptics(uint32_t id, uint32_t component, float fDurationSeconds, float fFrequency, float fAmplitude)
 {
-	IvryPsMoveTrackingApp *thiz = (IvryPsMoveTrackingApp*)user;
-	if (thiz != NULL)
+	if (m_pPsMoveClient != NULL)
 	{
-
+		m_pPsMoveClient->controller_haptics(id, fDurationSeconds, fFrequency, fAmplitude);
 	}
 }
-
-void IvryPsMoveTrackingApp::PsMoveClientLogCallback(const char *message, void *user)
-{
-	IvryPsMoveTrackingApp *thiz = (IvryPsMoveTrackingApp*)user;
-	if (thiz != NULL)
-	{
-		thiz->LogMessage(message);
-	}
-}
-

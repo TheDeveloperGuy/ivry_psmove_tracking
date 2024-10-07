@@ -1,6 +1,6 @@
 /*************************************************************************
 *
-* Copyright (C) 2016-2020 Mediator Software and/or its subsidiary(-ies).
+* Copyright (C) 2016-2024 Mediator Software and/or its subsidiary(-ies).
 * All rights reserved.
 * Contact: Mediator Software (info@mediator-software.com)
 *

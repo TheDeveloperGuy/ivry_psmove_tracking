@@ -1,6 +1,6 @@
 /*************************************************************************
 *
-* Copyright (C) 2016-2020 Mediator Software and/or its subsidiary(-ies).
+* Copyright (C) 2016-2024 Mediator Software and/or its subsidiary(-ies).
 * All rights reserved.
 * Contact: Mediator Software (info@mediator-software.com)
 *
@@ -35,6 +35,12 @@ public:
 	virtual DWORD Run();
 
 protected:
+	/** Send pose to driver **/
+	virtual void PoseUpdated(const vr::DriverPose_t &pose);
+
+	/** Controller haptics request has been received from driver **/
+	virtual void OnControllerHaptics(uint32_t id, uint32_t component, float fDurationSeconds, float fFrequency, float fAmplitude);
+
 	/** Pose has been recevied from driver **/
 	virtual void OnDevicePoseUpdated(const vr::DriverPose_t &pose);
 
@@ -52,16 +58,18 @@ protected:
 	/** Driver has recentered headset **/
 	virtual void OnDeviceRecenter();
 
+	/** Reload tracker settings **/
+	virtual void OnReloadSettings();
+
 	/** Driver is requesting tracking process quit **/
 	virtual void OnQuit();
 
-private:
-	/** Tracking callbacks **/
-	static void PsMoveClientTrackingCallback(vr::DriverPose_t &pose, void *user);
-	static void PsMoveClientControllerCallback(vr::DriverPose_t &pose, uint16_t buttons, float trigger, void *user);
-	static void PsMoveClientLogCallback(const char *message, void *user);
+	/** Check if PSMoveService is running **/
+	bool IsPsMoveServiceRunning();
 
+private:
 	/** PSMove client tracking instance **/
+	friend class IvryPsMoveClient;
 	IvryPsMoveClient *m_pPsMoveClient;
 
 	/** Handle to PSMoveService process **/
